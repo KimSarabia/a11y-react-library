@@ -18,24 +18,23 @@ class Tabs extends React.Component {
   }
 
   renderTabs = () => {
-    console.log("React.Children", React.Children);
-    return React.Children.map(this.props.children, (item, i) => {
-      if (i % 2 === 0) {
-        let active = this.state.active === i ? 'true' : 'false';
-        return <button
-        role="tab"
-        onClick = {this.select(i)}
-        aria-selected={`${active}`}>
-        {item}
-        </button>;
-      }
+    return ['tab 1', 'tab 2', 'tab 3'].map((item, i) => {
+      let active = this.state.active === i ? 'true' : 'false';
+      return <button
+      key={i}
+      role="tab"
+      onClick = {this.select(i)}
+      aria-selected={`${active}`}>
+      {item}
+      </button>;
     });
   }
 
+
   renderContent() {
-    return React.Children.map(this.props.children, (item, i) => {
-      if (i - 1 === this.state.active) {
-        return <div role='tabpanel' className='content'> {item} </div>;
+    return ['panel 1', 'panel 2', 'panel 3'].map((item, i) => {
+      if (i === this.state.active) {
+        return <div key={i} role='tabpanel' className='content'> {item} </div>;
       } else {
         return;
       }
@@ -56,12 +55,6 @@ class App extends React.Component {
   render() {
     return (
       <Tabs>
-      Tab 1
-      <p>First Panel</p>
-      Tab 2
-      <p>Second Panel</p>
-      Tab 3
-      <p>Third Panel</p>
       </Tabs>
     );
   }
