@@ -1,33 +1,37 @@
 import React, {Component} from 'react'
 
-const TabList = (props) => {
-  const tabs = props.characterData.map((tab, index) => {
-    return (
-      <button key={index}>{tab.name}</button>
-    )
-  })
-
-  return <div>{tabs}</div>
-}
-
-const TabPanel = () => {
-  return (
-    <div>
-      <h3>Name</h3>
-    </div>
-  )
-}
-
-class Tabs extends Component {
-  render() {
-    const {characterData} = this.props
-    return (
-      <table>
-        <TabList characterData={characterData} />
-        <TabPanel />
-      </table>
-    )
+export default class Tabs extends React.Component {
+  getInitialState() {
+    return {
+      selected: this.props.selected || 0
+    }
   }
-}
 
-export default Tabs
+  handleChange(index) {
+    this.setState({ selected: index });
+  }
+
+  render() {
+    return (
+      <div>
+        <ul className="inline">
+          {this.props.children.map((elem, index) => {
+            let style = index == this.state.selected ? "selected" : "";
+            return (
+              <li
+                className={style}
+                key={index}
+                onClick={this.handleChange.bind(this, index)}
+              >
+                {elem.props.title}
+              </li>
+            );
+          })}
+        </ul>
+        <div className="tab">{this.props.children[this.state.selected]}</div>
+      </div>
+    );
+  }
+};
+
+// export default Tabs;
