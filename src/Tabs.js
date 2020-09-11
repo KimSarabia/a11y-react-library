@@ -1,37 +1,52 @@
 import React, {Component} from 'react'
 
 export default class Tabs extends React.Component {
-  getInitialState() {
-    return {
-      selected: this.props.selected || 0
+  constructor(props) {
+    super();
+    this.state = {
+      active: 0
     }
   }
 
-  handleChange(index) {
-    this.setState({ selected: index });
+  select = (i) => {
+    let _this = this;
+    return function() {
+      _this.setState({ active: i });
+    }
+  }
+
+  renderTabs = () => {
+    return ['tab 1', 'tab 2', 'tab 3'].map((item, i) => {
+      let active = this.state.active === i ? 'true' : 'false';
+      return <button
+      key={i}
+      role="tab"
+      onClick = {this.select(i)}
+      aria-selected={`${active}`}>
+      {item}
+      </button>;
+    });
+  }
+
+
+  renderContent() {
+    return ['panel 1', 'panel 2', 'panel 3'].map((item, i) => {
+      if (i === this.state.active) {
+        return <div key={i} role='tabpanel' className='content'> {item} </div>;
+      } else {
+        return;
+      }
+    });
   }
 
   render() {
     return (
-      <div>
-        <ul className="inline">
-          {this.props.children.map((elem, index) => {
-            let style = index == this.state.selected ? "selected" : "";
-            return (
-              <li
-                className={style}
-                key={index}
-                onClick={this.handleChange.bind(this, index)}
-              >
-                {elem.props.title}
-              </li>
-            );
-          })}
-        </ul>
-        <div className="tab">{this.props.children[this.state.selected]}</div>
+      <div className="tabs">
+        {this.renderTabs()}
+        {this.renderContent()}
       </div>
     );
   }
-};
+}
 
 // export default Tabs;
